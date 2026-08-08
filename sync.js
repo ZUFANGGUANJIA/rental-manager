@@ -83,7 +83,7 @@
     const db = loadUserDB();
     const rec = db.users[name];
     if (!rec) return {ok:false, err:'账号不存在'};
-    if (!await verifyPassword(password, rec)) return {ok:false, err:'密码错误'};
+    if (!await verifyPassword(password, rec.hashRec)) return {ok:false, err:'密码错误'};
     return {ok:true, name, rec};
   }
   async function changePassword(name, oldP, newP){
