@@ -20,22 +20,26 @@
   body{max-width:480px;margin:0 auto;min-height:100vh;position:relative;background:var(--bg);}
   .app{max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;background:var(--bg);}
   /* login */
-  #login{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;
+  #auth{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;
     background:linear-gradient(160deg,#4f46e5,#7c6bff 60%,#22d3ee);}
-  #login .blur{position:absolute;inset:0;backdrop-filter:blur(2px);opacity:.0;}
-  .login-card{position:relative;width:84%;max-width:330px;background:#fff;border-radius:22px;padding:30px 24px;
+  #auth .blur{position:absolute;inset:0;backdrop-filter:blur(2px);opacity:.0;}
+  .auth-card{position:relative;width:84%;max-width:340px;background:#fff;border-radius:22px;padding:28px 24px 22px;
     box-shadow:0 24px 60px rgba(0,0,0,.25);text-align:center;}
-  .login-card .logo{width:64px;height:64px;border-radius:18px;margin:0 auto 14px;
-    background:linear-gradient(160deg,#4f46e5,#22d3ee);display:flex;align-items:center;justify-content:center;
-    color:#fff;font-size:30px;font-weight:800;box-shadow:0 8px 20px rgba(79,70,229,.4);}
-  .login-card h1{margin:0 0 4px;font-size:21px;letter-spacing:1px;}
-  .login-card p{margin:0 0 20px;color:var(--sub);font-size:13px;}
-  .login-card input{width:100%;padding:13px 14px;margin-bottom:12px;border:1px solid var(--line);
+  .auth-card .logo{width:74px;height:74px;border-radius:22px;margin:0 auto 12px;overflow:hidden;
+    box-shadow:0 10px 24px rgba(79,70,229,.45);}
+  .auth-card .logo svg{display:block;width:100%;height:100%;}
+  .auth-card h1{margin:0 0 4px;font-size:21px;letter-spacing:1px;}
+  .auth-card p{margin:0 0 18px;color:var(--sub);font-size:13px;}
+  .auth-card input{width:100%;padding:13px 14px;margin-bottom:11px;border:1px solid var(--line);
     border-radius:12px;font-size:15px;background:#fafbff;outline:none;}
-  .login-card input:focus{border-color:var(--brand);}
-  .login-card button{width:100%;padding:13px;border:none;border-radius:12px;font-size:16px;font-weight:700;
+  .auth-card input:focus{border-color:var(--brand);}
+  .auth-card .primary{width:100%;padding:13px;border:none;border-radius:12px;font-size:16px;font-weight:700;
     color:#fff;background:linear-gradient(135deg,#4f46e5,#7c6bff);box-shadow:0 8px 18px rgba(79,70,229,.35);}
-  .login-err{color:var(--over);font-size:12.5px;min-height:16px;margin:-4px 0 8px;}
+  .auth-card .secondary{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;
+    font-size:14.5px;font-weight:600;color:var(--ink);background:#fafbff;margin-top:8px;}
+  .auth-card .link{color:var(--brand);font-size:13.5px;display:inline-block;margin-top:10px;cursor:pointer;font-weight:600;}
+  .auth-err{color:var(--over);font-size:12.5px;min-height:16px;margin:-4px 0 6px;}
+  .auth-info{color:var(--paid);font-size:12.5px;min-height:16px;margin:-4px 0 6px;}
   .shake{animation:sk .4s;}
   @keyframes sk{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
 
@@ -147,20 +151,101 @@
   .me-row .mi{font-size:22px;width:30px;text-align:center;}
   .me-row .mt{font-size:15px;font-weight:600;}
   .me-row .mr{color:var(--sub);font-size:18px;}
-  .me-sub{font-size:11.5px;color:var(--sub);text-align:center;margin-top:14px;}
+  .me-sub{font-size:11.5px;color:var(--sub);text-align:center;margin-top:14px;line-height:1.6;}
+  .me-row .msub{font-size:11.5px;color:var(--sub);font-weight:400;margin-top:3px;line-height:1.4;}
+  .switch{position:relative;width:46px;height:26px;flex:0 0 auto;}
+  .switch input{opacity:0;width:0;height:0;position:absolute;}
+  .switch .slider{position:absolute;inset:0;background:#d9d9e3;border-radius:26px;transition:.2s;cursor:pointer;}
+  .switch .slider:before{content:"";position:absolute;width:20px;height:20px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2);}
+  .switch input:checked + .slider{background:var(--brand);}
+  .switch input:checked + .slider:before{transform:translateX(20px);}
   .imp-hint{font-size:11.5px;color:var(--sub);text-align:center;margin-top:6px;}
 </style>
 </head>
 <body>
-<div id="login">
-  <div class="login-card" id="loginCard">
-    <div class="logo">租</div>
+<div id="auth">
+  <!-- 登录卡片 -->
+  <div class="auth-card" id="loginCard">
+    <div class="logo" aria-label="租房管家 logo">
+      <!-- 紫色房子 + 橙色 ¥ 圆形（与 PWA 应用图标一致） -->
+      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img">
+        <defs>
+          <linearGradient id="lg" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%"  stop-color="#6E5CE6"/>
+            <stop offset="100%" stop-color="#8764EB"/>
+          </linearGradient>
+        </defs>
+        <rect width="100" height="100" rx="22" fill="url(#lg)"/>
+        <!-- 屋顶 -->
+        <polygon points="22,46 78,46 50,21" fill="#fff"/>
+        <!-- 房身（圆角矩形，已被屋顶遮挡顶部一点点） -->
+        <rect x="26" y="44" width="48" height="38" rx="5" fill="#fff"/>
+        <!-- 门 -->
+        <rect x="44" y="61" width="12" height="21" rx="3" fill="#5F4BC8"/>
+        <!-- 窗 左 -->
+        <rect x="33" y="52" width="9" height="9" rx="1.5" fill="#5F4BC8"/>
+        <!-- 窗 右 -->
+        <rect x="58" y="52" width="9" height="9" rx="1.5" fill="#5F4BC8"/>
+        <!-- 橙色 ¥ 圆 -->
+        <circle cx="74" cy="74" r="20" fill="#F58E0B"/>
+        <circle cx="74" cy="74" r="20" fill="none" stroke="#fff" stroke-width="1.5" opacity=".25"/>
+        <!-- ¥：V + 中竖 + 上下两横 -->
+        <g stroke="#fff" stroke-width="2.6" stroke-linecap="round" fill="none">
+          <line x1="65"  y1="68"  x2="74" y2="73"/>
+          <line x1="83"  y1="68"  x2="74" y2="73"/>
+          <line x1="74"  y1="73"  x2="74" y2="85"/>
+          <line x1="65"  y1="73"  x2="83" y2="73"/>
+          <line x1="65"  y1="78.5" x2="83" y2="78.5"/>
+        </g>
+      </svg>
+    </div>
     <h1>租房管家</h1>
     <p>手机版 · 房租到期提醒与收租管理</p>
-    <input id="lu" placeholder="账号" autocomplete="off" />
-    <input id="lp" type="password" placeholder="密码" />
-    <div class="login-err" id="loginErr"></div>
-    <button id="loginBtn">登 录</button>
+    <input id="lu" placeholder="账号" autocomplete="username" autocapitalize="off" spellcheck="false"/>
+    <input id="lp" type="password" placeholder="密码" autocomplete="current-password"/>
+    <div class="auth-err" id="loginErr"></div>
+    <button class="primary" id="loginBtn">登 录</button>
+    <div class="link" id="goRegister">还没有账号？立即注册</div>
+  </div>
+
+  <!-- 注册卡片（默认隐藏） -->
+  <div class="auth-card" id="registerCard" style="display:none;">
+    <div class="logo" aria-label="租房管家 logo">
+      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <use href="#logo-svg"/>
+        <defs>
+          <linearGradient id="lg2" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%"  stop-color="#6E5CE6"/>
+            <stop offset="100%" stop-color="#8764EB"/>
+          </linearGradient>
+        </defs>
+        <g>
+          <rect width="100" height="100" rx="22" fill="url(#lg2)"/>
+          <polygon points="22,46 78,46 50,21" fill="#fff"/>
+          <rect x="26" y="44" width="48" height="38" rx="5" fill="#fff"/>
+          <rect x="44" y="61" width="12" height="21" rx="3" fill="#5F4BC8"/>
+          <rect x="33" y="52" width="9" height="9" rx="1.5" fill="#5F4BC8"/>
+          <rect x="58" y="52" width="9" height="9" rx="1.5" fill="#5F4BC8"/>
+          <circle cx="74" cy="74" r="20" fill="#F58E0B"/>
+          <g stroke="#fff" stroke-width="2.6" stroke-linecap="round" fill="none">
+            <line x1="65" y1="68"  x2="74" y2="73"/>
+            <line x1="83" y1="68"  x2="74" y2="73"/>
+            <line x1="74" y1="73"  x2="74" y2="85"/>
+            <line x1="65" y1="73"  x2="83" y2="73"/>
+            <line x1="65" y1="78.5" x2="83" y2="78.5"/>
+          </g>
+        </g>
+      </svg>
+    </div>
+    <h1>创建账号</h1>
+    <p>首次使用请注册一个新账号</p>
+    <input id="ru" placeholder="账号（字母/数字，3位以上）" autocomplete="username"/>
+    <input id="rp" type="password" placeholder="密码（至少 6 位）" autocomplete="new-password"/>
+    <input id="rp2" type="password" placeholder="确认密码" autocomplete="new-password"/>
+    <div class="auth-err" id="regErr"></div>
+    <div class="auth-info" id="regInfo"></div>
+    <button class="primary" id="regBtn">注 册</button>
+    <div class="link" id="goLogin">已有账号？返回登录</div>
   </div>
 </div>
 
@@ -211,13 +296,45 @@
 
     <!-- 我的 -->
     <section class="view" id="view-me">
-      <div class="section-title">设置</div>
-      <div class="me-row" id="meExport"><div class="ml"><div class="mi">📤</div><div class="mt">导出备份</div></div><div class="mr">›</div></div>
-      <div class="me-row" id="meImport"><div class="ml"><div class="mi">📥</div><div class="mt">导入备份</div></div><div class="mr">›</div></div>
-      <div class="me-row" id="meLogout"><div class="ml"><div class="mi">🔒</div><div class="mt">退出登录</div></div><div class="mr">›</div></div>
-      <div class="me-sub">租房管家 · 手机版 v1.0<br/>账号 walkercoo · 数据仅保存在本机</div>
-      <div class="imp-hint">提示：安卓 Chrome 打开后，点右上角 ⋮ → “添加到主屏幕”，即可像 App 一样使用。</div>
-      <input type="file" id="fileInput" accept="application/json,.json" style="display:none;" />
+      <div class="section-title">云端同步（多设备共享）<span class="link" id="syncAccountBadge" style="color:var(--sub);font-weight:500;"></span></div>
+
+      <div class="me-row" id="meSyncUp" style="background:linear-gradient(135deg,#f0f0ff,#fff);border-color:#d8d4ff;">
+        <div class="ml"><div class="mi">☁️⬆️</div>
+          <div class="mt">立即上传到云端<div class="msub" id="meSyncUpSub">推送本机数据到 Cloudflare KV</div></div></div>
+        <div class="mr">›</div>
+      </div>
+      <div class="me-row" id="meSyncDown"><div class="ml"><div class="mi">☁️⬇️</div>
+        <div class="mt">从云端拉取<div class="msub">合并远端数据到本地（覆盖式）</div></div></div>
+        <div class="mr">›</div></div>
+
+      <div class="me-row" style="display:block;padding:14px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+          <div style="font-weight:700;">自动云同步</div>
+          <label class="switch"><input type="checkbox" id="autoCloud"><span class="slider"></span></label>
+        </div>
+        <input id="cloudUrl" placeholder="Worker URL（例：https://rental-sync.xxx.workers.dev）"
+               style="width:100%;padding:10px;border:1px solid var(--line);border-radius:10px;font-size:13px;background:#fafbff;outline:none;font-family:inherit;">
+        <div class="msub" style="margin-top:6px;line-height:1.5;">
+          ① 跑 <code style="background:#eef0fb;padding:1px 6px;border-radius:4px;">cf-worker\deploy_worker.py</code>
+          一键部署 <br/>
+          ② 或浏览器进 Cloudflare Dashboard → Workers → 粘入 worker.js 部署 <br/>
+          ③ 把得到的 URL 粘进这里，启用自动同步即可
+        </div>
+      </div>
+
+      <div class="section-title">数据备份（换手机 / 浏览器也不丢）</div>
+      <div class="me-row" id="meExportJson"><div class="ml"><div class="mi">📤</div><div class="mt">备份为 JSON 文件</div></div><div class="mr">›</div></div>
+      <div class="me-row" id="meExportXml"><div class="ml"><div class="mi">📤</div><div class="mt">备份为 XML 文件</div></div><div class="mr">›</div></div>
+      <div class="me-row" id="meImport"><div class="ml"><div class="mi">📥</div><div class="mt">从文件恢复</div></div><div class="mr">›</div></div>
+      <div class="me-row" id="meAuto"><div class="ml"><div class="mi">🔁</div><div class="mt">自动备份<div class="msub">每次改动自动下载备份文件</div></div></div><div class="switch"><input type="checkbox" id="autoBackup"><span class="slider"></span></div></div>
+      <div class="me-sub">数据默认存本机浏览器；上传云端后可换设备 / 换浏览器随时拉取。</div>
+
+      <div class="section-title">账号</div>
+      <div class="me-row" id="meLogout"><div class="ml"><div class="mi">🔓</div><div class="mt">退出登录</div></div><div class="mr">›</div></div>
+      <div class="me-row" id="meChangePwd" style="display:none;"><div class="ml"><div class="mi">🔑</div><div class="mt">修改密码</div></div><div class="mr">›</div></div>
+      <div class="me-sub" id="meAccountInfo">租房管家 · 手机版 v1.2<br/>账号 walkercoo · 数据仅保存在本机</div>
+      <div class="imp-hint">提示：安卓 Chrome 打开后，点右上角 ⋮ → "添加到主屏幕"，即可像 App 一样使用。</div>
+      <input type="file" id="fileInput" accept=".json,.xml,application/json,application/xml,text/xml" style="display:none;" />
     </section>
   </main>
 
@@ -306,6 +423,7 @@
 
 <div class="toast" id="toast"></div>
 
+<script src="sync.js"></script>
 <script>
 const LS='rental_mobile_v1';
 const SOON_DAYS=3;
@@ -316,6 +434,7 @@ let editingPropId=null;
 let editingPayPropId=null, editingPayId=null;
 let sheetPropId=null;
 let curCycle='monthly', curStatus='renting';
+let currentUser='';   // 当前登录账号
 
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8);}
 function today(){const d=new Date();d.setHours(0,0,0,0);return d;}
@@ -326,7 +445,16 @@ function esc(s){return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>'
 
 function load(){try{const d=JSON.parse(localStorage.getItem(LS));if(!d)return {properties:[]};if(!d.properties)d.properties=[];return migrate(d);}catch(e){return {properties:[]};}}
 function migrate(d){d.properties.forEach(p=>{if(!p.pstatus)p.pstatus='renting';if(p.cycle!=='quarterly')p.cycle='monthly';if(!p.payments)p.payments=[];p.payments.forEach(pm=>{if(!pm.id)pm.id=uid();});});return d;}
-function save(){localStorage.setItem(LS,JSON.stringify(state));}
+function save(){
+  // 多账号分桶存储
+  const key = currentUser ? ('rental_data_user_'+currentUser+'_v1') : LS;
+  localStorage.setItem(key, JSON.stringify(state));
+  if(typeof autoBackupIfNeeded==='function') autoBackupIfNeeded();
+  // 触发自动云同步（如果开启）
+  if(currentUser && typeof RentalSync!=='undefined'){
+    RentalSync.scheduleAutoSync(currentUser, ()=>state, 6000);
+  }
+}
 
 function lastPayment(p){if(!p.payments.length)return null;return p.payments.reduce((a,b)=>parseD(a.date)>parseD(b.date)?a:b);}
 function nextDueOf(p){const lp=lastPayment(p);if(!lp)return null;const d=parseD(lp.date);const m=p.cycle==='quarterly'?3:1;d.setMonth(d.getMonth()+m);return d;}
@@ -598,53 +726,247 @@ document.querySelectorAll('nav .item').forEach(it=>it.onclick=()=>{
 document.getElementById('fab').onclick=openPropModal;
 document.getElementById('addPropLink').onclick=openPropModal;
 
-/* ---------- export / import ---------- */
-document.getElementById('meExport').onclick=()=>{
-  const data=JSON.stringify(state,null,2);
-  const blob=new Blob([data],{type:'application/json'});
-  const name='租房管家手机版备份_'+today().toISOString().slice(0,10)+'.json';
-  if(navigator.canShare&&navigator.canShare({files:[new File([blob],name,{type:'application/json'})]})){
-    navigator.share({files:[new File([blob],name,{type:'application/json'})],title:'租房管家备份'}).catch(()=>{});
+/* ---------- prefs ---------- */
+function getPref(k,def){try{const p=JSON.parse(localStorage.getItem('rental_prefs')||'{}');return (k in p)?p[k]:def;}catch(e){return def;}}
+function setPref(k,v){const p=JSON.parse(localStorage.getItem('rental_prefs')||'{}');p[k]=v;localStorage.setItem('rental_prefs',JSON.stringify(p));}
+
+/* ---------- export / import (JSON + XML) ---------- */
+function toXML(st){
+  const esc=s=>String(s==null?'':s).replace(/[<>&'"]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;',"'":'&apos;','"':'&quot;'}[c]));
+  let x='<?xml version="1.0" encoding="UTF-8"?>\n<rental>\n  <properties>\n';
+  for(const p of st.properties){
+    x+='    <property>\n';
+    x+=`      <id>${esc(p.id)}</id>\n`;
+    x+=`      <name>${esc(p.name)}</name>\n`;
+    x+=`      <address>${esc(p.address||'')}</address>\n`;
+    x+=`      <cycle>${esc(p.cycle)}</cycle>\n`;
+    x+=`      <amount>${esc(p.amount)}</amount>\n`;
+    x+=`      <pstatus>${esc(p.pstatus||'renting')}</pstatus>\n`;
+    x+=`      <vacantSince>${esc(p.vacantSince||'')}</vacantSince>\n`;
+    x+=`      <note>${esc(p.note||'')}</note>\n`;
+    x+='      <payments>\n';
+    for(const pm of (p.payments||[])){
+      x+='        <payment>\n';
+      x+=`          <id>${esc(pm.id)}</id>\n`;
+      x+=`          <date>${esc(pm.date)}</date>\n`;
+      x+=`          <amount>${esc(pm.amount)}</amount>\n`;
+      x+=`          <note>${esc(pm.note||'')}</note>\n`;
+      x+='        </payment>\n';
+    }
+    x+='      </payments>\n    </property>\n';
+  }
+  x+='  </properties>\n</rental>\n';
+  return x;
+}
+function fromXML(text){
+  const doc=new DOMParser().parseFromString(text,'application/xml');
+  if(doc.querySelector('parsererror')) throw new Error('xml');
+  const props=[...doc.querySelectorAll('property')].map(el=>{
+    const txt=t=>(el.querySelector(t)?.textContent||'').trim();
+    const payments=[...el.querySelectorAll('payment')].map(pe=>{
+      const pt=t=>(pe.querySelector(t)?.textContent||'').trim();
+      return {id:pt('id')||uid(),date:pt('date'),amount:Number(pt('amount'))||0,note:pt('note')};
+    });
+    return {id:txt('id')||uid(),name:txt('name'),address:txt('address'),cycle:txt('cycle')||'monthly',
+            amount:Number(txt('amount'))||0,pstatus:txt('pstatus')||'renting',vacantSince:txt('vacantSince'),
+            note:txt('note'),payments};
+  });
+  return {properties:props};
+}
+function downloadFile(content,mime,name){
+  const blob=new Blob([content],{type:mime});
+  if(navigator.canShare&&navigator.canShare({files:[new File([blob],name,{type:mime})]})){
+    navigator.share({files:[new File([blob],name,{type:mime})],title:'租房管家备份'}).catch(()=>{});
     return;
   }
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();
-  URL.revokeObjectURL(a.href);toast('已导出备份');
-};
+  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+function exportAs(fmt){
+  const name='租房管家备份_'+today().toISOString().slice(0,10)+'.'+fmt;
+  if(fmt==='xml'){downloadFile(toXML(state),'application/xml',name);toast('已导出 XML 备份');}
+  else{downloadFile(JSON.stringify(state,null,2),'application/json',name);toast('已导出 JSON 备份');}
+}
+function autoBackupIfNeeded(){
+  if(!getPref('autoBackup',false))return;
+  downloadFile(JSON.stringify(state,null,2),'application/json','租房管家自动备份.json');
+}
+document.getElementById('meExportJson').onclick=()=>exportAs('json');
+document.getElementById('meExportXml').onclick=()=>exportAs('xml');
 document.getElementById('meImport').onclick=()=>document.getElementById('fileInput').click();
 document.getElementById('fileInput').onchange=e=>{
   const f=e.target.files[0];if(!f)return;
   const r=new FileReader();
-  r.onload=()=>{try{const d=JSON.parse(r.result);if(!d.properties)throw 0;state=migrate(d);save();render();toast('导入成功');}catch(err){toast('文件格式不正确');}};
+  r.onload=()=>{try{
+    let d;
+    if(f.name.toLowerCase().endsWith('.xml')||/^\s*<\?xml/i.test(r.result)) d=fromXML(r.result);
+    else d=JSON.parse(r.result);
+    if(!d.properties)throw 0;
+    d.properties.forEach(p=>{if(!p.id)p.id=uid();(p.payments||[]).forEach(pm=>{if(!pm.id)pm.id=uid();});});
+    state=migrate(d);save();render();toast('导入成功');
+  }catch(err){toast('文件格式不正确');}};
   r.readAsText(f);e.target.value='';
 };
-document.getElementById('meLogout').onclick=()=>{logged=false;document.getElementById('app').style.display='none';document.getElementById('login').style.display='flex';};
+const autoEl=document.getElementById('autoBackup');
+autoEl.checked=!!getPref('autoBackup',false);
+autoEl.onchange=()=>{setPref('autoBackup',autoEl.checked);toast(autoEl.checked?'已开启自动备份':'已关闭自动备份');if(autoEl.checked)autoBackupIfNeeded();};
+document.getElementById('meLogout').onclick=()=>{
+  if(!currentUser){toast('当前未登录');return;}
+  if(!confirm('确认退出当前账号？\n本机数据保留，但不会清空。')) return;
+  logged=false;currentUser='';RentalSync.setAccount('');
+  document.getElementById('app').style.display='none';
+  document.getElementById('auth').style.display='';
+  showLogin();
+  refreshSyncUI();
+};
 
-/* ---------- login ---------- */
-function doLogin(){
+/* ---------- 修改密码 ---------- */
+document.getElementById('meChangePwd').onclick = async ()=>{
+  if(!currentUser) return;
+  const oldP = prompt('请输入旧密码'); if(oldP===null) return;
+  const newP = prompt('请输入新密码（至少6位）'); if(newP===null) return;
+  if(!newP || newP.length<6){alert('新密码至少6位');return;}
+  const r = await RentalSync.changePassword(currentUser, oldP, newP);
+  alert(r.ok ? '密码已更新 ✓' : ('修改失败：'+r.err));
+};
+
+/* ---------- 登录/注册（PBKDF2 + 本地用户库） ---------- */
+function showLogin(){document.getElementById('loginCard').style.display='';document.getElementById('registerCard').style.display='none';}
+function showRegister(){document.getElementById('loginCard').style.display='none';document.getElementById('registerCard').style.display='';}
+function loginErr(msg){
+  document.getElementById('loginErr').textContent=msg||'';
+  if(msg){ const c=document.getElementById('loginCard');c.classList.add('shake'); setTimeout(()=>c&&c.classList.remove('shake'),400); }
+}
+function regMsg(err,info){
+  document.getElementById('regErr').textContent=err||'';
+  document.getElementById('regInfo').textContent=info||'';
+}
+async function doLogin(){
   const u=document.getElementById('lu').value.trim();
   const p=document.getElementById('lp').value;
-  if(u===CRED.u&&p===CRED.p){
-    logged=true;document.getElementById('login').style.display='none';
-    document.getElementById('app').style.display='flex';
-    document.getElementById('fab').classList.add('show');
-    render();
-  } else {
-    const c=document.getElementById('loginCard');c.classList.add('shake');
-    document.getElementById('loginErr').textContent='账号或密码错误';
-    setTimeout(()=>c.classList.remove('shake'),400);
-  }
+  if(!u||!p){loginErr('请输入账号和密码');return;}
+  loginErr('验证中…');
+  const r = await RentalSync.loginUser(u,p);
+  if(!r.ok){loginErr(r.err);return;}
+  currentUser = u;
+  RentalSync.setAccount(u);
+  const dataKey = 'rental_data_user_'+u+'_v1';
+  let d;
+  try{ d = JSON.parse(localStorage.getItem(dataKey)); }catch(e){d=null;}
+  state = d && d.properties ? migrate(d) : {properties:[]};
+  save();
+  logged = true;
+  document.getElementById('auth').style.display='none';
+  document.getElementById('app').style.display='';
+  document.getElementById('fab').classList.add('show');
+  loginErr('');
+  refreshSyncUI();
+  render();
 }
-document.getElementById('loginBtn').onclick=doLogin;
+async function doRegister(){
+  const u=document.getElementById('ru').value.trim();
+  const p=document.getElementById('rp').value;
+  const p2=document.getElementById('rp2').value;
+  regMsg('','');
+  if(!u||!p||!p2){regMsg('请填完所有字段');return;}
+  if(p!==p2){regMsg('两次输入的密码不一致');return;}
+  const r = await RentalSync.registerUser(u,p);
+  if(!r.ok){regMsg(r.err);return;}
+  regMsg('','注册成功，正在登录…');
+  document.getElementById('lu').value=u;
+  document.getElementById('lp').value=p;
+  showLogin();
+  setTimeout(doLogin,80);
+}
+document.getElementById('loginBtn').onclick = doLogin;
+document.getElementById('regBtn').onclick   = doRegister;
+document.getElementById('goRegister').onclick = showRegister;
+document.getElementById('goLogin').onclick    = showLogin;
 document.getElementById('lp').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
 document.getElementById('lu').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('lp').focus();});
+document.getElementById('rp2').addEventListener('keydown',e=>{if(e.key==='Enter')doRegister();});
+
+/* ---------- 云端同步（Cloudflare KV via Worker URL） ---------- */
+function getSyncOpts(){return RentalSync.getSyncOpts();}
+function setSyncOpts(o){RentalSync.setSyncOpts(o);}
+function refreshSyncUI(){
+  const opts = getSyncOpts();
+  const urlI = document.getElementById('cloudUrl');if(urlI) urlI.value = opts.url || '';
+  const aI = document.getElementById('autoCloud');if(aI) aI.checked = !!opts.auto;
+  document.getElementById('syncAccountBadge').textContent = currentUser ? ('已登录：' + currentUser) : '';
+  const badge = document.getElementById('meAccountInfo');
+  if(badge){
+    if(currentUser){
+      badge.innerHTML = '租房管家 · 手机版 v1.2<br/>当前账号 <b>'+esc(currentUser)+'</b> · 多设备云同步';
+    }else{
+      badge.innerHTML = '租房管家 · 手机版 v1.2<br/>未登录';
+    }
+  }
+  const mp = document.getElementById('meChangePwd');
+  if(mp) mp.style.display = currentUser ? 'flex' : 'none';
+}
+async function uploadToCloud(){
+  if(!currentUser){toast('请先登录');return;}
+  const opts = getSyncOpts();
+  if(!opts.url){toast('请先填写 Worker URL');return;}
+  toast('上传中…');
+  const r = await RentalSync.cloudPut(currentUser, state, opts.url);
+  if(!r.ok){toast('上传失败：'+r.err);return;}
+  toast('已上传到云端 ✓');
+}
+async function downloadFromCloud(){
+  if(!currentUser){toast('请先登录');return;}
+  const opts = getSyncOpts();
+  if(!opts.url){toast('请先填写 Worker URL');return;}
+  toast('拉取中…');
+  const r = await RentalSync.cloudGet(currentUser, opts.url);
+  if(!r.ok){toast('拉取失败：'+r.err);return;}
+  if(!r.data){toast('云端暂无数据');return;}
+  if(!confirm('确认用云端数据覆盖本机？\n\n本机：'+state.properties.length+' 套房产\n云端：'+((r.data.properties||[]).length)+' 套房产')) return;
+  state = migrate(r.data);
+  save();
+  render();
+  toast('已从云端拉取 ✓');
+}
+function bindSyncUI(){
+  const urlI = document.getElementById('cloudUrl');
+  if(urlI) urlI.onchange = ()=>{ const o=getSyncOpts(); o.url = urlI.value.trim(); setSyncOpts(o); toast('已保存 Worker URL'); };
+  const aI = document.getElementById('autoCloud');
+  if(aI) aI.onchange = (e)=>{ const o=getSyncOpts(); o.auto=e.target.checked; setSyncOpts(o); toast(e.target.checked?'自动云同步已开启':'自动云同步已关闭'); };
+  const up = document.getElementById('meSyncUp');   if(up) up.onclick   = uploadToCloud;
+  const dn = document.getElementById('meSyncDown'); if(dn) dn.onclick = downloadFromCloud;
+}
+
+/* ---------- boot ---------- */
+async function boot(){
+  bindSyncUI();
+  refreshSyncUI();
+  const acc = RentalSync.getAccount();
+  if(acc){
+    const db = RentalSync.loadUserDB();
+    if(db.users[acc]){
+      currentUser = acc;
+      const dataKey = 'rental_data_user_'+acc+'_v1';
+      let d;
+      try{ d = JSON.parse(localStorage.getItem(dataKey)); }catch(e){d=null;}
+      state = d && d.properties ? migrate(d) : {properties:[]};
+      logged = true;
+      document.getElementById('auth').style.display='none';
+      document.getElementById('app').style.display='';
+      document.getElementById('fab').classList.add('show');
+      refreshSyncUI();
+      render();
+    } else {
+      RentalSync.setAccount('');
+    }
+  }
+}
+boot();
 
 /* ---------- toast ---------- */
 let toastTimer;
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
   clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),1800);}
-
-/* ---------- swipe/refresh header date ---------- */
-state=load();
 
 /* ---------- service worker ---------- */
 if('serviceWorker' in navigator){
