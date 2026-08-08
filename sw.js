@@ -1,7 +1,8 @@
-const CACHE = 'rental-mobile-v1';
+const CACHE = 'rental-mobile-v2';
 const ASSETS = [
   '.',
   'index.html',
+  'sync.js',
   'manifest.webmanifest',
   'icons/icon-192.png',
   'icons/icon-512.png'
